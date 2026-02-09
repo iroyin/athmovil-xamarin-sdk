@@ -6,7 +6,9 @@ using ATHMovil.Purchase.Model.Config;
 using ATHMovil.Purchase.Model.Manager;
 using ATHMovil.Purchase.Storage;
 using ATHMovil.Purchase.Utils;
+using ATHMovil.Purchase.Internal;
 using ATHMovil.PurchaseSDK.String;
+using System.Text.Json;
 
 namespace ATHMovil.Purchase.Model
 {
@@ -97,10 +99,11 @@ namespace ATHMovil.Purchase.Model
             }
 
             Handler = handler;
-
+            
             if (!Business.PublicToken.ToLower().Equals("dummy")){
 
                 SDKGlobal.Instance().PublicToken = this.Business.PublicToken;
+                SDKGlobal.Instance().Scheme = this.URLScheme.Scheme;
                 this.Purchase.PublicToken = this.Business.PublicToken;
                 this.Purchase.TimeOut = (int)this.TimeOut;
 
@@ -109,7 +112,7 @@ namespace ATHMovil.Purchase.Model
                 if (!string.IsNullOrEmpty(ecommerceId)){
                     this.Purchase.EcommerceId = ecommerceId;
                     OpenATHMovil(handler);
-                }
+                }      
             }
             else{
                 OpenATHMovil(handler);
@@ -127,9 +130,11 @@ namespace ATHMovil.Purchase.Model
                     break;
                 case OpenerResult.NotSupportedPlatform:
                     handler.OnException(PurchaseException.Request("The current device is not supported"));
+       
                     break;
                 case OpenerResult.Error:
                     handler.OnException(PurchaseException.Request("There is an error creating the request for ATH Móvil"));
+               
                     break;
             }
         }
@@ -140,7 +145,7 @@ namespace ATHMovil.Purchase.Model
         /// <param name="responseBody">Current JSON Body</param>
         internal void Paid(string responseBody)
         {
-            
+
             PurchaseResponse response = CrossDecoder.Current.Decode(responseBody);
 
             if (response == null)
@@ -148,6 +153,23 @@ namespace ATHMovil.Purchase.Model
                 Handler.OnException(PurchaseException.Response("Error converting the response from ATH Movil"));
                 return;
             }
+            string eventType = response.Info.Status switch
+            {
+                PurchaseState.completed => "payment_completed",
+                PurchaseState.cancelled => "payment_cancelled",
+                PurchaseState.expired => "payment_expired",
+                PurchaseState.failed => "payment_failed",
+                _ => "payment_unknown_status"
+            };
+             
+              NewRelicConfig.SendEventToNewRelic(
+                eventType: NewRelicConstants.NR.FINISH_PAYMENT_SUCCESS,
+                paymentStatus: eventType,
+                paymentReference: SDKGlobal.Instance().EcommerceID ?? "N/A",
+                merchantAppId: SDKGlobal.Instance().Scheme ?? "N/A",
+                buildType: GetBuildType()
+         );
+            
 
             switch (response.Info.Status)
             {
@@ -164,6 +186,14 @@ namespace ATHMovil.Purchase.Model
                     Handler.OnFailed(response);
                     break;
             }
+        }
+        private string GetBuildType()
+        {
+         #if DEBUG
+            return "QA";
+         #else
+            return "PROD";
+         #endif
         }
     }
 }

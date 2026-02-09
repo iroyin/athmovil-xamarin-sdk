@@ -26,7 +26,7 @@ namespace NuevoCheckout.Models
             Total = 1;
             Token = "Dummy";
             Timeout = 600;
-            Environment = ATHMovilTarget.QA.ToString();
+            Environment = ATHMovilTarget.Production.ToString();
             Theme = ATHMovil.Purchase.UI.Theme.Classic.ToString();
         }
 

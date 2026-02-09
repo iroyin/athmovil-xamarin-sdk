@@ -2,8 +2,6 @@
 {
     public enum ATHMovilTarget
     {
-        DEV,
-        QA,
         Pilot,
         Production
     }

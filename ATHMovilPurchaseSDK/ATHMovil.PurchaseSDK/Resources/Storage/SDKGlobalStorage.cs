@@ -39,6 +39,12 @@ namespace ATHMovil.Purchase.Storage
             get => Preferences.Get("Flow", "");
             set => Preferences.Set("Flow", value);
         }
+
+        public string Scheme
+        {
+            get => Preferences.Get("Scheme", "");
+            set => Preferences.Set("Scheme", value);
+        }
     }
 }
 

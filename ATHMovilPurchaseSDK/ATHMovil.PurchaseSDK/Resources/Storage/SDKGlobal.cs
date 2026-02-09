@@ -9,6 +9,8 @@ namespace ATHMovil.Purchase.Storage
         public String Token { get; set; }
         public String PublicToken { get; set; }
 
+        public String Scheme { get; set; }
+
         private static SDKGlobal _instance = null;
 
         private SDKGlobal()
@@ -24,6 +26,7 @@ namespace ATHMovil.Purchase.Storage
                 _instance.EcommerceID = SDKGlobalStorage.ShareInstance.Value.EcommerceID;
                 _instance.Token = SDKGlobalStorage.ShareInstance.Value.Token;
                 _instance.PublicToken = SDKGlobalStorage.ShareInstance.Value.PublicToken;
+                _instance.Scheme = SDKGlobalStorage.ShareInstance.Value.Scheme;
 
                 return _instance;
             }

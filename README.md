@@ -4,47 +4,26 @@
 ## Introduction
 ATH Móvil's Payment Button SDK provides a simple, secure and fast checkout experience to customers paying on your iOS/Android application. After integrating our Payment Button on your app you will be able to receive real time payments from more than 1.5 million ATH Móvil users.
 
-Disclaimer: The Payment Button ATH Móvil is not compatible with any major Ecommerce platform. This includes Shopify, Wix, Woocommerce or Stripe.
-
-Disclaimer: We currently **do not** have a **Testing environment**. You need to have an active ATH Business account and a active ATH Móvil account.
 
 ## Prerequisites
-Before using the ATH Móvil’s payment you need to have:
+Before you begin, please review the following prerequisites:
+1. An active ATH Móvil Business account is required to continue. To sign up, download "ATH Móvil Business" on the App Store or Play Store of your iOS or Android device.
+2. Your ATH Móvil Business account needs to have a registered, verified and active ATH® card.
+3. Have the public and private API keys of your Business account at hand. **You can view your API keys on the settings section of ATH Móvil Business for iOS or Android.**
 
-### ATH Business
-
-1\. An active ATH Business account.
-
-2\. A card registered in your ATH Business profile. 
-
-3\. The public and private key assigned to your business.
-
-For instructions on how to open a ATH Business account please refer to: [ATHB flyer eng letter 1.pdf](https://github.com/user-attachments/files/16267504/ATHB.flyer.eng.letter.1.pdf)
-
-For more information related to ATH Business and how it works please refer to:[ATH BUSINESS_Apr2024.pptx](https://github.com/user-attachments/files/16267585/ATH.BUSINESS_Apr2024.pptx)
-
-### ATH Móvil
-
-To complete the payment for testing purposes you need to have:
-
-1\. An active ATH Móvil account.
-
-2\. A card registered in your ATH Móvil profile. It can not be the same card that is registered in ATH Business.
-
-For more information related to ATH Móvil and how it works please refer to:[ATH Móvil_Apr2024.pptx](https://github.com/user-attachments/files/16267592/ATH.Movil_Apr2024.pptx)
 
 ## Support
-If you need help signing up, adding a card or have any other question please refer to https://ath.business.com/preguntas. For technical support please complete the following form:  https://ath.business/botondepago.
+If you need help signing up, adding a card or have any other question please refer to <a href=https://athmovilbusiness.com/preguntas>questions</a> or contact our support team at (787) 773-5466. For technical support please complete the following <a href=https://forms.gle/ZSeL8DtxVNP2K2iDA>form</a>.
 
 
 ## Installation
 
 ATH Movil SDK works for Android and iOS so you can add it to your project as local Package Sources. This repository containts the compiled package so avoid compile the project. In order to do that you should follow the next steps:
 
-* The new version of the xamarin SDK has been migrated to xamarin maui, which makes use of the net-8.0 libraries for android and ios.
-* Into the repository find the file named **ATHMovil.PurchaseSDK** this file containts the compiled package of ATH Movil SKD. Download the file **ATHMovil.PurchaseSDK**.
+* The new version of the xamarin SDK has been migrated to xamarin maui, which makes use of the net-6.0 libraries for android and ios.
+* Into the repository find the file named **ATHMovil.PurchaseSDK.1.0.0.nupkg** this file containts the compiled package of ATH Movil SKD. Download the file **ATHMovil.PurchaseSDK.1.0.0.nupkg**.
 * Open your project and navigate to Visual Studio > Preferences > NuGet > Sources, this option will show you the remote and local packages that are configured in your computer.
-* Then click add button, the next window will required some information such as name, for the name you might set **ATHMovil SDK**, for the Location select the location of the file **ATHMovil.PurchaseSDK.5.0.0.nupkg**. After this the local source package has been configured and imported to Visual Studio.
+* Then click add button, the next window will required some information such as name, for the name you might set **ATHMovil SDK**, for the Location select the location of the file **ATHMovil.PurchaseSDK.1.0.0.nupkg**. After this the local source package has been configured and imported to Visual Studio.
 * Now you should add the ATH Movil Package to your project as dependencie, in order to do that, in your project right click on dependencies and select Manage NutGet Packages, in the next window look for the option Package Source and select ATHMovil SDK, then you will see the package **ATHMovil.PurchaseSDK**.
 * Select the option latest version and press the button Add Package.
 * Now you must see the references of ATH Movil SDK in your project, it should be configured for Android or iOS then you can move to the next section Configuration.
@@ -308,12 +287,12 @@ The following optional properties can be used to add additional information to t
 
   | Variable  | Data Type | Required | Description |
   | ------------- |:-------------:|:-----:| ------------- |
-  | `Subtotal`      | double | No | Optional  variable to display the payment subtotal (if applicable) |
-  | `Tax`           | double | No | Optional variable to display the payment tax (if applicable). |
-  | `Metadata1`     | string | No | Optional variable to attach data to the payment object. Max length 40 characters. |
-  | `Metadata2`     | string | No | Optional variable to attach data to the payment object. Max length 40 characters. |
-  | `Items`         | List<PurchaseItem> | No | Optional variable to display the items that the user is purchasing on ATH Móvil's payment summary screen. |
-  | `PhoneNumber`   | String | No | Optional variable to send the customer's phone number. |
+  | `Subtotal` | double | No | Optional  variable to display the payment subtotal (if applicable) |
+  | `Tax` | double | No | Optional variable to display the payment tax (if applicable). |
+  | `Metadata1` | string | No | Optional variable to attach data to the payment object. Max length 40 characters. |
+  | `Metadata2` | string | No | Optional variable to attach data to the payment object. Max length 40 characters. |
+  | `Items` | List<PurchaseItem> | No | Optional variable to display the items that the user is purchasing on ATH Móvil's payment summary screen. |
+  | `PhoneNumber` | String | No | Optional variable to send the customer's phone number. |
 
 **Items Array**
 
@@ -321,11 +300,11 @@ For items properties there is a class named PurchaseItem, you can use it to fill
 
   | Variable  | Data Type | Required | Description |
   | ------------- |:-------------:|:-----:| ------------- |
-  | `Name`      | string | Yes | Name of item. |
-  | `Price`     | double | Yes | Price of individual item. |
-  | `Quantity`  | int | Yes | Quantity of individual item. |
+  | `Name` | string | Yes | Name of item. |
+  | `Price` | double | Yes | Price of individual item. |
+  | `Quantity` | int | Yes | Quantity of individual item. |
   | `Description` | string | No | Brief description of the item. |
-  | `Metadata`  | string | No | Optional variable to attach data to the item object. |
+  | `Metadata` | string | No | Optional variable to attach data to the item object. |
   
   
 As you notice in the PurchaseHandler you set a methods of your view model. Those methods are receiving a parameter of  PurchaseResponse type. The following table describe the properties for this object.
@@ -383,19 +362,34 @@ If unexpected data is sent on the request of the payment the SDK will call the c
     error.IsRequestError ///True if the error is in input data.
 ```
 
+If the new payment flow has been chosen, the Authorization service must be consumed after receiving the successful response from the ATH Personas app. To do the above, you need to implement the following code:
+
 ```csharp
 
- private async void getServiceAuthorization(PurchaseResponse response) {
+private async void getServiceAuthorization(PurchaseResponse response) {
 
     this.response = response;
 
     await Task.Delay(1000);
 
-    if (!Global.Instance().Token.ToLower().Equals("dummy")){
+    if (!Global.Instance().Token.ToLower().Equals("dummy"))
+    {
         AuthorizationServices service = new AuthorizationServices();
-        PurchaseResponse authorizationObject = await service.AuthorizationServicesCall(response);
-        _ = ShowConfirmationPageAsync(authorizationObject);
-    }else{
+        AuthorizationResponse authorizationObject = await service.AuthorizationServicesCall();
+        if (authorizationObject != null)
+        {
+            response.Info.DailyTransactionID = int.Parse(authorizationObject.Data.DailyTransactionId);
+            response.Info.ReferenceNumber = authorizationObject.Data.ReferenceNumber;
+            response.Purchase.NetAmount = authorizationObject.Data.NetAmount;
+            response.Purchase.Fee = authorizationObject.Data.Fee;
+        }
+        else {
+            response.Info.Status = PurchaseState.failed;
+        }
+
+        _ = ShowConfirmationPageAsync(response);
+    }
+    else {
         _ = ShowConfirmationPageAsync(response);
     }
 }

@@ -95,7 +95,13 @@ namespace ATHMovil.Purchase.Openers
         /// <returns>Returns the bundle of Android</returns>
         internal static string GetTargetBundle(this ATHMovilTarget target)
         {
-            return "com.evertec.athmovil.android";
+            switch (target)
+            {
+                case ATHMovilTarget.Pilot:
+                    return "com.evertec.athmovil.android.piloto";
+                default:
+                    return "com.evertec.athmovil.android";
+            }
         }
     }
 }

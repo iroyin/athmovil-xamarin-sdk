@@ -15,8 +15,6 @@ namespace NuevoCheckout.ViewModels
             get
             {
                 List<string> listEnvi = new List<string> {
-                    ATHMovilTarget.DEV.ToString(),
-                    ATHMovilTarget.QA.ToString(),
                     ATHMovilTarget.Pilot.ToString(),
                     ATHMovilTarget.Production.ToString()
                 };

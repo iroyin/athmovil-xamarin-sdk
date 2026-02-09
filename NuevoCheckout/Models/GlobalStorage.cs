@@ -24,7 +24,7 @@ namespace NuevoCheckout.Models
 
         public string SelectedEnviroment
         {
-            get => Preferences.Get("Enviroment", ATHMovilTarget.QA.ToString());
+            get => Preferences.Get("Enviroment", ATHMovilTarget.Production.ToString());
             set => Preferences.Set("Enviroment", value);
         }
 

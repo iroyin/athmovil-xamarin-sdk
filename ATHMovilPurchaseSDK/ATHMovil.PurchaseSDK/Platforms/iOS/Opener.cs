@@ -96,7 +96,13 @@ namespace ATHMovil.Purchase.Openers
         /// <returns>Depends on the target will return an URL that containts the version of ATH Movil</returns>
         internal static string GetTargetUniversalLink(this ATHMovilTarget target)
         {
-            return "https://athmovil-ios.web.app/e-commerce/";
+            switch (target)
+            {
+                case ATHMovilTarget.Pilot:
+                    return "https://athmovil-ios-pilot.web.app/e-commerce/";
+                default:
+                    return "https://athmovil-ios.web.app/e-commerce/";
+            }
         }
     }
 }

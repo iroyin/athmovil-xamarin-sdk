@@ -4,6 +4,7 @@ using ATHMovil.Purchase.Storage;
 using ATHMovil.Purchase.Model;
 using ATHMovil.Purchase.Model.Manager;
 using ATHMovil.PurchaseSDK.String;
+using ATHMovil.Purchase.Internal;
 
 namespace ATHMovil.Purchase.Utils
 {
@@ -12,6 +13,8 @@ namespace ATHMovil.Purchase.Utils
 
         public Command CallApiCommand { get; set; }
         internal HttpClient _client;
+        string scheme = SDKGlobal.Instance().Scheme ?? "N/A";
+
         private string Host
         {
             get{
@@ -67,14 +70,22 @@ namespace ATHMovil.Purchase.Utils
                     // Agregar la cabecera "Host"
                     client.DefaultRequestHeaders.Add("Host", Host);
                     HttpResponseMessage response = await client.PostAsync("https://"+ Host + "/api/business-transaction/ecommerce/payment", callContent);
-
+                
                     if (response.IsSuccessStatusCode){
                         var content = await response.Content.ReadAsStringAsync();
                         var result = JsonConvert.DeserializeObject<PaymentResponseModel>(content);
                         if (!string.IsNullOrEmpty(result.getData().getEcommerce()) && !string.IsNullOrEmpty(result.getData().getToken())){
                             SDKGlobal.Instance().EcommerceID = result.getData().getEcommerce();
                             SDKGlobal.Instance().Token = result.getData().getToken();
-                            return result.getData().getEcommerce();
+                             NewRelicConfig.SendEventToNewRelic(
+                                eventType: NewRelicConstants.NR.INIT_PAYMENT_SUCCESS,
+                                paymentReference: result.getData().getEcommerce(),
+                                paymentStatus: NewRelicConstants.NR.SUCCESS_PAYMENT,
+                                merchantAppId: scheme,
+                                buildType: GetBuildType()
+                            ); 
+                            return result.getData().getEcommerce(); 
+
                         }else {
                             verificarError(result);
                         }
@@ -98,9 +109,16 @@ namespace ATHMovil.Purchase.Utils
 
         public async void verificarError(PaymentResponseModel error) {
             if (error.getErrorcode() != null && error.getErrorcode().Equals("BCUS_0092")) {
-
                 await Task.Delay(1000);
                 _ = Application.Current.MainPage.DisplayAlert(StringMensaje.GetBusinessErrorTitle(), StringMensaje.GetBusinessErrorMessage(), "OK", FlowDirection.MatchParent);
+
+                   NewRelicConfig.SendEventToNewRelic(
+                            eventType: NewRelicConstants.NR.INIT_PAYMENT_FAILURE,
+                            paymentReference: error.getMessage() ?? "N/A",
+                            paymentStatus: NewRelicConstants.NR.FAILED_PAYMENT,
+                            merchantAppId: scheme,
+                            buildType: GetBuildType()
+            );
             }
             else {
                 _ = genericErrorAsync();
@@ -110,6 +128,17 @@ namespace ATHMovil.Purchase.Utils
         public async Task genericErrorAsync() {
             await Task.Delay(1000);
             _ = Application.Current.MainPage.DisplayAlert(StringMensaje.GetGenericErrorTitle(), StringMensaje.GetGenericErrorMessage(), "OK", FlowDirection.MatchParent);
+        }
+
+
+
+         private string GetBuildType()
+        {
+         #if DEBUG
+            return "QA";
+         #else
+            return "PROD";
+         #endif
         }
     }
 }
