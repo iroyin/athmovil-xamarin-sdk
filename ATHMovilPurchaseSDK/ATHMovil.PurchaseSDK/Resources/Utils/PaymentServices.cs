@@ -44,6 +44,13 @@ namespace ATHMovil.Purchase.Utils
             IsBusy = false;
         }
 
+        private string GetAppName()
+        {
+            string appName = AppInfo.Current.Name ?? "Unknown";
+            Console.WriteLine($"[PaymentServices] App Name: {appName}");
+            return appName;
+        }
+
         public async Task<string> PaymentServicesCall(PurchaseRequest purchase)
         {
             return await CallApi(purchase);
@@ -77,11 +84,12 @@ namespace ATHMovil.Purchase.Utils
                         if (!string.IsNullOrEmpty(result.getData().getEcommerce()) && !string.IsNullOrEmpty(result.getData().getToken())){
                             SDKGlobal.Instance().EcommerceID = result.getData().getEcommerce();
                             SDKGlobal.Instance().Token = result.getData().getToken();
+                             
                              NewRelicConfig.SendEventToNewRelic(
                                 eventType: NewRelicConstants.NR.INIT_PAYMENT_SUCCESS,
                                 paymentReference: result.getData().getEcommerce(),
                                 paymentStatus: NewRelicConstants.NR.SUCCESS_PAYMENT,
-                                merchantAppId: scheme,
+                                merchantAppId: GetAppName(),
                                 buildType: GetBuildType()
                             ); 
                             return result.getData().getEcommerce(); 
@@ -116,7 +124,7 @@ namespace ATHMovil.Purchase.Utils
                             eventType: NewRelicConstants.NR.INIT_PAYMENT_FAILURE,
                             paymentReference: error.getMessage() ?? "N/A",
                             paymentStatus: NewRelicConstants.NR.FAILED_PAYMENT,
-                            merchantAppId: scheme,
+                            merchantAppId: GetAppName(),
                             buildType: GetBuildType()
             );
             }
