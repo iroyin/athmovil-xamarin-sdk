@@ -161,12 +161,14 @@ namespace ATHMovil.Purchase.Model
                 PurchaseState.failed => "payment_failed",
                 _ => "payment_unknown_status"
             };
+
+            string appName = AppInfo.Current.Name;
              
               NewRelicConfig.SendEventToNewRelic(
                 eventType: NewRelicConstants.NR.FINISH_PAYMENT_SUCCESS,
                 paymentStatus: eventType,
                 paymentReference: SDKGlobal.Instance().EcommerceID ?? "N/A",
-                merchantAppId: SDKGlobal.Instance().Scheme ?? "N/A",
+                merchantAppId: appName,
                 buildType: GetBuildType()
          );
             
